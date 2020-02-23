@@ -43,7 +43,9 @@ RUN set -ex; \
 		perl \
 		tzdata \
 		xz-utils; \
-	rm -rf /var/lib/apt/lists/*; \
+	rm -rf /var/lib/apt/lists/*
+
+RUN set -ex; \
 	key='A4A9406876FCBD3C456770C88C718D3B5072E1F5'; \
 	export GNUPGHOME="$(mktemp -d)"; \
 	gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$key"; \
@@ -64,17 +66,17 @@ RUN { \
 	apt-get install -y \
 		mysql-community-client="${MYSQL_VERSION}" \
 		mysql-community-server-core="${MYSQL_VERSION}"; \
-		rm -rf /var/lib/apt/lists/* && \
-		rm -rf /var/lib/mysql && \
-		mkdir -p /var/lib/mysql /var/run/mysqld && \
-		chown -R mysql:mysql /var/lib/mysql /var/run/mysqld && \
-		chmod 777 /var/run/mysqld && \
-		chmod -R 0755 /etc/mysql/ && \
-		mkdir /var/lib/mysql-files && \
-		chmod 777 /var/lib/mysql-files
+	rm -rf /var/lib/apt/lists/* && \
+	rm -rf /var/lib/mysql && \
+	mkdir -p /var/lib/mysql /var/run/mysqld && \
+	chown -R mysql:mysql /var/lib/mysql /var/run/mysqld && \
+	chmod 777 /var/run/mysqld && \
+	chmod -R 0755 /etc/mysql/ && \
+	mkdir /var/lib/mysql-files && \
+	chmod 777 /var/lib/mysql-files
 
 VOLUME /var/lib/mysql
-COPY config/ /etc/mysql/
+COPY config /etc/mysql/
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
 ENTRYPOINT ["docker-entrypoint.sh"]

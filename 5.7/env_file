@@ -4,15 +4,16 @@
 # Path to this .env file relative to
 # the Dockerfile
 ENV=env_file
+DOCKER_FILE=Dockerfile
 
 #MYSQL_VER_MINOR = $(shell echo ${MYSQL_VER} | grep -oE '^[0-9]+\.[0-9]+')
 
 # Docker hub repo
-REPO=goobaahh/mysql-dockerd
+REPO=iodockerd/mysql
 
 # Version of the application/service
 # PHP ->7.4<-, Ubuntu ->18.04<-
-TAG=8.0
+TAG=5.7
 
 # Dockerd image release version.
 # Corresponds to release tag:
