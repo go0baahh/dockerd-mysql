@@ -1,5 +1,6 @@
-#FROM debian:stretch-slim
-FROM iodockerd/ubuntu:18.04
+ARG FROM=${FROM}
+
+FROM $FROM
 
 ENV GOSU_VERSION 1.7
 ENV MYSQL_MAJOR 8.0
@@ -53,8 +54,6 @@ RUN set -ex; \
 
 RUN echo "deb http://repo.mysql.com/apt/debian/ stretch mysql-${MYSQL_MAJOR}" > /etc/apt/sources.list.d/mysql.list
 
-# the "/var/lib/mysql" stuff here is because the mysql-server postinst doesn't have an explicit way to disable the mysql_install_db codepath besides having a database already "configured" (ie, stuff in /var/lib/mysql/mysql)
-# also, we set debconf keys to make APT a little quieter
 RUN { \
 		echo mysql-community-server mysql-community-server/data-dir select ''; \
 		echo mysql-community-server mysql-community-server/root-pass password ''; \
@@ -69,18 +68,15 @@ RUN { \
 		rm -rf /var/lib/mysql && \
 		mkdir -p /var/lib/mysql /var/run/mysqld && \
 		chown -R mysql:mysql /var/lib/mysql /var/run/mysqld && \
-# ensure that /var/run/mysqld (used for socket and lock files) is writable regardless of the UID our mysqld instance ends up having at runtime
 		chmod 777 /var/run/mysqld && \
 		chmod -R 0755 /etc/mysql/ && \
 		mkdir /var/lib/mysql-files && \
 		chmod 777 /var/lib/mysql-files
 
 VOLUME /var/lib/mysql
-# Config files
 COPY config/ /etc/mysql/
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
 ENTRYPOINT ["docker-entrypoint.sh"]
-
 EXPOSE 3306 33060
 CMD ["mysqld"]

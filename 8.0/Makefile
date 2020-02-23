@@ -27,9 +27,6 @@ default: build
 build:
 	docker build -t $(REPO):$(TAG) \
 		--build-arg FROM=$(FROM) \
-	    --build-arg TAG=$(TAG) \
-	    --build-arg DB_VER=$(DB_VER) \
-	    --build-arg APT_VER=$(APT_VER) \
 	    -f $(DOCKER_FILE) ./
 
 test:

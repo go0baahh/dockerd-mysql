@@ -8,7 +8,7 @@ ENV=env_file
 #MYSQL_VER_MINOR = $(shell echo ${MYSQL_VER} | grep -oE '^[0-9]+\.[0-9]+')
 
 # Docker hub repo
-REPO=iodockerd/mysql
+REPO=goobaahh/mysql-dockerd
 
 # Version of the application/service
 # PHP ->7.4<-, Ubuntu ->18.04<-
